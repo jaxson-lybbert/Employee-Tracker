@@ -87,10 +87,42 @@ function userPrompt() {
                   console.log(err);
                 } else {
                   console.log("Employee added!");
+                  userPrompt();
                 }
               }
             );
           });
+      }
+      // Updates the role of an employee
+      if (res.menuChoice == "Update Employee Role") {
+      }
+      // Queries the database for all the roles
+      if (res.menuChoice == "View All Roles") {
+        db.query("SELECT * FROM role", (err, results) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(results);
+            userPrompt();
+          }
+        });
+      }
+      // Allows the User to add a role
+      if (res.menuChoice == "Add Role") {
+      }
+      // Queries the database for all of the departments
+      if (res.menuChoice == "View All Departments") {
+        db.query("SELECT * FROM department", (err, results) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(results);
+            userPrompt();
+          }
+        });
+      }
+      // Adds a department
+      if (res.menuChoice == "Add Department") {
       }
       // Exits prompt
       if (res.menuChoice == "Quit") {
