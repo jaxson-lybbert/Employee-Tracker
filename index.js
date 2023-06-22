@@ -51,119 +51,120 @@ function userPrompt() {
       // TODO: How to make the ROLE and MANAGER list update with the database?
       if (res.menuChoice == "Add Employee") {
         // db.query for employee list and role list
-        if (res.menuChoice == "View All Employees") {
-          db.query(
-            "SELECT name, id AS value FROM role",
-            (err, role_results) => {
-              if (err) {
-                console.log(err);
-              } else {
-                db.query(
-                  "SELECT name, id AS value FROM employee",
-                  (err, employee_results) => {
-                    if (err) {
-                      console.log(err);
-                    } else {
-                      // userPrompt();
-                      inquirer
-                        .prompt([
-                          {
-                            type: "input",
-                            message: "Employee's first name:",
-                            name: "first_name",
-                          },
-                          {
-                            type: "input",
-                            message: "Employee's last name:",
-                            name: "last_name",
-                          },
-                          {
-                            type: "list",
-                            message: "What is the employee's role?",
-                            choices: role_results, // Query result from role table
-                            name: "role_id",
-                          },
-                          {
-                            type: "list",
-                            message: "Who is the employee's manager?",
-                            choices: employee_results, // query result from the employee table
-                            name: "manager_id",
-                          },
-                        ])
-                        .then((res) => {
-                          db.query(
-                            `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
-                            [
-                              res.first_name,
-                              res.last_name,
-                              res.role_id,
-                              res.manager_id,
-                            ],
-                            (err, result) => {
-                              if (err) {
-                                console.log(err);
-                              } else {
-                                console.log("Employee added!");
-                                userPrompt();
-                              }
+        db.query(
+          "SELECT title AS name, id AS value FROM role",
+          (err, role_results) => {
+            if (err) {
+              console.log(err);
+            } else {
+              db.query(
+                `SELECT CONCAT(first_name, " ", last_name)AS name, id AS value FROM employee`,
+                (err, employee_results) => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    inquirer
+                      .prompt([
+                        {
+                          type: "input",
+                          message: "Employee's first name:",
+                          name: "first_name",
+                        },
+                        {
+                          type: "input",
+                          message: "Employee's last name:",
+                          name: "last_name",
+                        },
+                        {
+                          type: "list",
+                          message: "What is the employee's role?",
+                          choices: role_results, // Query result from role table
+                          name: "role_id",
+                        },
+                        {
+                          type: "list",
+                          message: "Who is the employee's manager?",
+                          choices: employee_results, // query result from the employee table
+                          name: "manager_id",
+                        },
+                      ])
+                      .then((res) => {
+                        db.query(
+                          `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
+                          [
+                            res.first_name,
+                            res.last_name,
+                            res.role_id,
+                            res.manager_id,
+                          ],
+                          (err, result) => {
+                            if (err) {
+                              console.log(err);
+                            } else {
+                              console.log("Employee added!");
+                              userPrompt();
                             }
-                          );
-                        });
-                    }
+                          }
+                        );
+                      });
                   }
-                );
-              }
+                }
+              );
             }
-          );
-        }
+          }
+        );
       }
       // Updates the role of an employee
       if (res.menuChoice == "Update Employee Role") {
-        db.query("SELECT name, id AS value FROM role", (err, role_results) => {
-          if (err) {
-            console.log(err);
-          } else {
-            db.query(
-              "SELECT name, id AS value FROM employee",
-              (err, employee_results) => {
-                if (err) {
-                  console.log(err);
-                } else {
-                  // userPrompt();
-                  inquirer
-                    .prompt([
-                      {
-                        type: "list",
-                        message: "Which employee's role do you want to udpate?",
-                        choices: employee_results,
-                        name: "employeeChoice",
-                      },
-                      {
-                        type: "list",
-                        message: "What is their new role?",
-                        choices: role_results,
-                        name: "roleChoice",
-                      },
-                    ])
-                    .then((res) => {
-                      db.query(
-                        `UPDATE employee SET role_id = ? WHERE id = ?`,
-                        [res.roleChoice, res.employeeChoice],
-                        (err, result) => {
-                          if (err) {
-                            console.log(err);
-                          } else {
-                            console.log("Employee role updated!");
-                            userPrompt();
+        db.query(
+          "SELECT title AS name, id AS value FROM role",
+          (err, role_results) => {
+            if (err) {
+              console.log(err);
+            } else {
+              db.query(
+                `SELECT CONCAT(first_name, " ", last_name)AS name, id AS value FROM employee`,
+                (err, employee_results) => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    // userPrompt();
+                    inquirer
+                      .prompt([
+                        {
+                          type: "list",
+                          message:
+                            "Which employee's role do you want to udpate?",
+                          choices: employee_results,
+                          name: "employeeChoice",
+                        },
+                        {
+                          type: "list",
+                          message: "What is their new role?",
+                          choices: role_results,
+                          name: "roleChoice",
+                        },
+                      ])
+                      .then((res) => {
+                        db.query(
+                          `UPDATE employee SET role_id = ? WHERE id = ?`,
+                          [res.roleChoice, res.employeeChoice],
+                          (err, result) => {
+                            if (err) {
+                              console.log(err);
+                            } else {
+                              console.log("Employee role updated!");
+                              userPrompt();
+                            }
                           }
-                        }
-                      );
-                    });
+                        );
+                      });
+                  }
                 }
-              }
-            );
+              );
+            }
           }
-        });
+        );
       }
       // Queries the database for all the roles
       if (res.menuChoice == "View All Roles") {
