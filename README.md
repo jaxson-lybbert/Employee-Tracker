@@ -18,7 +18,7 @@ You will need your own .env to run this application on your local instance of My
 
 ## Usage
 
-The app comes with data to seed the database, or you can start from scratch. The app will prompt you with various options. You can add employees, roles, departments, and maintain, view, and update all of this data from the command line.
+The app comes with data to seed the database, or you can start from scratch. The app will prompt you with various options. You can add employees, roles, departments, and maintain, view, and update all of this data from the command line. There is a demo video of the app [here](https://drive.google.com/file/d/1YhJYgZbcgKCEUphKhMpxl_eMI6n7BCoM/view)
 
 ## Contributing
 
